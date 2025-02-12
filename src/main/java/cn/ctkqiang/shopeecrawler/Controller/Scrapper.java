@@ -1,37 +1,62 @@
 package cn.ctkqiang.shopeecrawler.Controller;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+import cn.ctkqiang.shopeecrawler.Constants.Names;
+
+@Deprecated(since = "CAPTCHA", forRemoval = true)
 public class Scrapper extends Utilities {
+    private String baseURL;
 
     @Temporary
     private final String url = "https://shopee.tw/%E9%99%A4%E8%9A%A4%E7%94%A8%E5%93%81-cat.11040647.11040669.11040680?is_from_signup=true&is_from_login=true";
+
+    public Scrapper(String _url) {
+        this.baseURL = Optional.ofNullable(_url)
+                .filter(u -> !u.isEmpty())
+                .orElse(this.url);
+    }
 
     @Override
     protected void ExportToCSV(List<Map<String, String>> Data, String FilePath) throws IOException {
         super.ExportToCSV(Data, FilePath);
     }
 
+    @SuppressWarnings("unused")
     public void GetWebsData() {
-        System.out.println("Getting Web Data..."); // TODO Remove this
-
-        String cssQuery = ".shopee-search-item-result__item";
+        String cssQuery = ".break-words";
 
         try {
-            Document document = Jsoup.connect(this.url).get();
-            Elements productNames = document.select(cssQuery);
+            if (this.IsWorking(new URL(this.baseURL))) {
 
-            System.out.println(document);
+                Document document = Jsoup.connect(this.url)
+                        .userAgent(Names.WEB_AGENT)
+                        .get();
+                Elements productNames = document.select(cssQuery);
+
+            }
+
+            return;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public boolean IsWorking(URL url) {
+        return super.IsWorking(url);
     }
 
 }

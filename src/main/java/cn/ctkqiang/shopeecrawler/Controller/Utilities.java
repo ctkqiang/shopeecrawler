@@ -1,9 +1,16 @@
 package cn.ctkqiang.shopeecrawler.Controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import org.springframework.lang.NonNull;
 
 import cn.ctkqiang.shopeecrawler.Constants.Names;
 
@@ -13,6 +20,7 @@ import cn.ctkqiang.shopeecrawler.Constants.Names;
  * 包含CSV文件导出、数据格式化以及执行延时等基础功能。
  */
 public class Utilities {
+    private static final Logger logger = LoggerFactory.getLogger(Scrapper.class);
     private static final String APPLICATION_NAME = Names.APPLICATION_NAME;
 
     /**
@@ -91,6 +99,42 @@ public class Utilities {
             Thread.sleep(seconds * 1000L);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
+        }
+    }
+
+    /**
+     * 检查URL连接状态
+     * 通过发送HEAD请求检查目标URL是否可访问
+     * 
+     * @param url 需要检查的URL
+     * @return 如果连接正常返回true，否则返回false
+     */
+    public boolean IsWorking(@NonNull URL url) {
+        HttpURLConnection connection = null;
+        try {
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("HEAD");
+            connection.setConnectTimeout(5000);
+            connection.setReadTimeout(5000);
+
+            int responseCode = connection.getResponseCode();
+            boolean isWorking = responseCode >= 200 && responseCode < 400;
+
+            logger.info("{}URL状态检查 - {} [响应码: {}]",
+                    APPLICATION_NAME,
+                    isWorking ? "连接正常" : "连接异常",
+                    responseCode);
+
+            return isWorking;
+
+        } catch (Exception e) {
+            logger.error("{}URL连接失败: {}", APPLICATION_NAME, e.getMessage());
+            return false;
+
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
         }
     }
 }

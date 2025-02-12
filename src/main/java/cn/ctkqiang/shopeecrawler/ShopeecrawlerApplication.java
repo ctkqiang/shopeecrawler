@@ -19,10 +19,7 @@ public class ShopeecrawlerApplication {
 	private static final SpringApplication APP = new SpringApplication(ShopeecrawlerApplication.class);
 
 	public static void main(String[] args) {
-		// APP.run(args);
-
-		Scrapper scrapper = new Scrapper();
-		scrapper.GetWebsData();
+		ShopeecrawlerApplication.APP.run(args);
 	}
 
 	@Bean
