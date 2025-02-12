@@ -15,6 +15,8 @@ import cn.ctkqiang.shopeecrawler.Constants.Names;
 
 @Deprecated(since = "CAPTCHA", forRemoval = true)
 public class Scrapper extends Utilities {
+    private final int TIMEOUT = 5000;
+
     private String baseURL;
 
     @Temporary
@@ -40,9 +42,14 @@ public class Scrapper extends Utilities {
 
                 Document document = Jsoup.connect(this.url)
                         .userAgent(Names.WEB_AGENT)
+                        .header(Names.HEADER[0],
+                                Names.HEADER[1])
+                        .timeout(this.TIMEOUT)
                         .get();
+
                 Elements productNames = document.select(cssQuery);
 
+                System.out.println(document);
             }
 
             return;

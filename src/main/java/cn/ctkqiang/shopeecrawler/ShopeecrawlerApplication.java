@@ -8,8 +8,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import cn.ctkqiang.shopeecrawler.Constants.Names;
-import cn.ctkqiang.shopeecrawler.Controller.Scrapper;
-import cn.ctkqiang.shopeecrawler.Controller.Utilities;
 
 @SpringBootApplication
 public class ShopeecrawlerApplication {
