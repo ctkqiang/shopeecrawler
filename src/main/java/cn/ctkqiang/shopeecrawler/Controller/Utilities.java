@@ -20,8 +20,8 @@ import cn.ctkqiang.shopeecrawler.Constants.Names;
  * 包含CSV文件导出、数据格式化以及执行延时等基础功能。
  */
 public class Utilities {
-    private static final Logger logger = LoggerFactory.getLogger(Scrapper.class);
-    private static final String APPLICATION_NAME = Names.APPLICATION_NAME;
+    public static final Logger logger = LoggerFactory.getLogger(Utilities.class);
+    public static final String APPLICATION_NAME = Names.APPLICATION_NAME;
 
     /**
      * 将数据导出为CSV格式文件
